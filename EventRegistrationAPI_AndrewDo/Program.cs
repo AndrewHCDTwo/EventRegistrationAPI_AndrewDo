@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
