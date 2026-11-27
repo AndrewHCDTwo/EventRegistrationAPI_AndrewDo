@@ -1,5 +1,6 @@
 ﻿using EventRegistrationAPI_AndrewDo.Data;
 using EventRegistrationAPI_AndrewDo.DTOs;
+using EventRegistrationAPI_AndrewDo.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventRegistrationAPI_AndrewDo.Services
@@ -34,6 +35,35 @@ namespace EventRegistrationAPI_AndrewDo.Services
                 .ToListAsync();
         }
 
+        
+        // Creates a new event from the input DTO and returns it as an EventDto
+        public async Task<EventDto> CreateAsync(CreateEventDto dto)
+        {
+            // map the event
+            var newEvent = new Event
+            {
+                Title = dto.Title,
+                Location = dto.Location,
+                EventDate = dto.EventDate,
+                Capacity = dto.Capacity
+            };
+
+            _context.Events.Add(newEvent);
+            await _context.SaveChangesAsync();
+
+            // map entity
+            return new EventDto
+            {
+                EventId = newEvent.EventId,
+                Title = newEvent.Title,
+                Location = newEvent.Location,
+                EventDate = newEvent.EventDate,
+                Capacity = newEvent.Capacity,
+                RegisteredCount = 0,
+                SpotsLeft = newEvent.Capacity
+            };
+        }
+        
         // Returns one event or null if it does not exist 
         public async Task<EventDto?> GetByIdAsync(int id)
         {

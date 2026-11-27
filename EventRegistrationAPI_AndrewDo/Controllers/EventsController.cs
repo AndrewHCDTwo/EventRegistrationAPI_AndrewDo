@@ -21,6 +21,15 @@ namespace EventRegistrationAPI_AndrewDo.Controllers
         {
             var events = await _eventService.GetAllAsync();
             return Ok(events); // 200 OK
+        }    
+        
+        [HttpPost] // POST: api/Events
+        public async Task<ActionResult<EventDto>> CreateEvent(CreateEventDto dto)
+        {
+            // [ApiController] returns 400 automatically if the DTO fails validation
+            var createdEvent = await _eventService.CreateAsync(dto);
+
+            return CreatedAtAction(nameof(GetEvent), new { id = createdEvent.EventId }, createdEvent); // 201 Created
         }
 
         [HttpGet("{id}")] // GET: api/Events/5
